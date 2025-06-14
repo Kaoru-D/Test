@@ -1,5 +1,4 @@
-module github.com/Kaoru-D/backend
-
+module github.com/Kaoru-D/Test
 go 1.24.4
 
 require (

@@ -3,8 +3,8 @@ package main
 import (
     "log"
     "github.com/gin-gonic/gin"
-    "Test/control"
-    "Test/dataBase"
+    "github.com/Kaoru-D/Test/control"
+    "github.com/Kaoru-D/Test/dataBase"
     "os"
 )
 
