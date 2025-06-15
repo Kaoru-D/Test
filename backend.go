@@ -2,27 +2,29 @@ package main
 
 import (
     "log"
+    "os"
     "github.com/gin-gonic/gin"
     "github.com/Kaoru-D/Test/control"
     "github.com/Kaoru-D/Test/dataBase"
-    "os"
+    
 )
 
 func main() {
     db := dataBase.Conectar()
 
     // Ejecutar archivo SQL solo una vez si quieres crear tablas/datos
-    sqlBytes, err := os.ReadFile("sql/finanzas.sql")
-    if err != nil {
+    sqlBytes, err := os.ReadFile("sql/finanzas.sql")// Se asegura de que la ruta sea correcta
+    if err != nil { // se asegura de que el archivo exista
         log.Fatal("No se pudo leer el SQL:", err)
     }
-    db.Exec(string(sqlBytes))
+    db.Exec(string(sqlBytes))// Ejecuta el SQL para crear tablas o insertar datos
 
-    r := gin.Default()
-    r.GET("/transacciones", control.ObtenerTransacciones(db))
+    r := gin.Default() // Crea un nuevo router
+    r.GET("/transacciones", control.ObtenerTransacciones(db))// Define la ruta para obtener transacciones
 
-    r.POST("/transacciones", control.GuardarTransaccion(db))
-    r.Run(":5432") // http://localhost:8080/transacciones
+    r.POST("/transacciones", control.GuardarTransaccion(db)) // Define la ruta para guardar una transacción
+    
+    r.Run(":8080") // http://localhost:8080/transacciones 
 }
 
    
