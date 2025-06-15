@@ -20,5 +20,10 @@ func main() {
 
     r := gin.Default()
     r.GET("/transacciones", control.ObtenerTransacciones(db))
-    r.Run(":8080")
+
+    r.POST("/transacciones", control.GuardarTransaccion(db))
+    r.Run(":5432") // http://localhost:8080/transacciones
 }
+
+   
+
