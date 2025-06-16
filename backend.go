@@ -27,7 +27,7 @@ func main() {
         c.Next()
     })
 
-    r.GET("/transacciones", control.ListarTransacciones)   // Define la ruta para obtener transacciones
+    r.GET("/transacciones", control.ListarTransacciones)   // Define la ruta para listar transacciones
     r.POST("/transacciones", control.GuardarTransaccion(db)) // Define la ruta para guardar una transacción
     
     r.Run(":8080") // http://localhost:8080/transacciones 
