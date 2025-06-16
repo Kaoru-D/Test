@@ -192,30 +192,6 @@ func ListarTransacciones(c *gin.Context) {
         `, accountID)
 	} else { // Si no se proporciona account_id, obtenemos todas las transacciones
 		// Ejecutamos una consulta SQL para obtener todas las transacciones
-		rows, err = db.Query(`
-            SELECT 
-            id,
-            account_id,
-            amount,
-            currency,
-            type,
-            description,
-            created_at,
-            SUM(
-                CASE 
-                    WHEN type = 'deposito' THEN amount
-                    WHEN type = 'retiro' THEN -amount
-                    ELSE 0
-                END
-            ) OVER (
-                PARTITION BY account_id 
-                ORDER BY created_at
-                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-            ) AS saldo_acumulado
-        FROM transactions
-        ORDER BY created_at DESC;
-        `)
-
 		startDate := c.Query("start_date") // Obtenemos el parámetro de fecha de inicio si se proporciona
 		endDate := c.Query("end_date") // Obtenemos el parámetro de fecha de fin si se proporciona
 
@@ -276,7 +252,7 @@ func ListarTransacciones(c *gin.Context) {
 
 		query += " ORDER BY created_at DESC"    // Agregamos el ordenamiento por fecha de creación
 
-		rows, err := db.Query(query, params...) // Ejecutamos la consulta con los parámetros correspondientes
+		rows, err = db.Query(query, params...) // Ejecutamos la consulta con los parámetros correspondientes
 
 	}
 
