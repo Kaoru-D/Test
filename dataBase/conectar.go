@@ -7,7 +7,7 @@ import (
 )
 
 func Conectar() *sql.DB {
-    dsn := "user=postgres password=246810 dbname=finanzas sslmode=disable"
+    dsn := "postgres://postgres:246810@192.168.32.1:5432/finanzas?sslmode=disable"
     db, err := sql.Open("postgres", dsn)
     if err != nil {
         log.Fatal("Error al conectar:", err)

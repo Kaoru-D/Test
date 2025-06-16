@@ -13,3 +13,4 @@ CREATE TABLE if not exists transactions (
   description TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
