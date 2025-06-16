@@ -20,8 +20,8 @@ func main() {
     db.Exec(string(sqlBytes))// Ejecuta el SQL para crear tablas o insertar datos
 
     r := gin.Default() // Crea un nuevo router
-    r.GET("/transacciones", control.ObtenerTransacciones(db))// Define la ruta para obtener transacciones
-
+    
+    r.GET("/transacciones", control.ObtenerTransacciones)   // Define la ruta para obtener transacciones
     r.POST("/transacciones", control.GuardarTransaccion(db)) // Define la ruta para guardar una transacción
     
     r.Run(":8080") // http://localhost:8080/transacciones 

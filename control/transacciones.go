@@ -75,7 +75,7 @@ func ObtenerTransacciones(c *gin.Context) {
     var transacciones []Transaccion
     for rows.Next() {
         var t Transaccion
-        if err := rows.Scan(&t.ID, &t.AccountID, &t.Amount, &t.Currency, &t.Type, &t.Description, &t.CreatedAt, &t.Saldo); err != nil {
+        if err := rows.Scan(&t.ID, &t.AccountID, &t.Amount, &t.Currency, &t.Type, &t.Description, &t.CreatedAt, &t.SaldoAcumulado); err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
             return
         }
