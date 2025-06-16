@@ -99,7 +99,7 @@ func GuardarTransaccion(db *sql.DB) gin.HandlerFunc {
 		// Si la vinculación es exitosa, procedemos a insertar los datos en la base de datos
 		// Ejecutamos una consulta SQL para insertar una nueva transacción
 		_, err := db.Exec(`
-            INSERT INTO transactions (account_id, amount::float8, currency, type, description, created_at)
+            INSERT INTO transactions (account_id, amount, currency, type, description, created_at)
             VALUES ($1, $2, $3, $4, $5, $6)
         `, t.AccountID, t.Amount, t.Currency, t.Type, t.Description, time.Now())
 
