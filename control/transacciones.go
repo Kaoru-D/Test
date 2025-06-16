@@ -44,7 +44,7 @@ func ObtenerTransacciones(c *gin.Context) {
         SELECT
             t.id,
             t.account_id,
-            t.amount,
+            t.amount::float8, -- Asegúrate de que el tipo de datos coincida con tu base de datos
             t.currency,
             t.type,
             t.description,
@@ -147,7 +147,7 @@ func GuardarTransaccion(db *sql.DB) gin.HandlerFunc {
 		// Si la vinculación es exitosa, procedemos a insertar los datos en la base de datos
 		// Ejecutamos una consulta SQL para insertar una nueva transacción
 		_, err := db.Exec(`
-            INSERT INTO transactions (account_id, amount, currency, type, description, created_at)
+            INSERT INTO transactions (account_id, amount::float8, currency, type, description, created_at)
             VALUES ($1, $2, $3, $4, $5, $6)
         `, t.AccountID, t.Amount, t.Currency, t.Type, t.Description, time.Now())
 
@@ -174,7 +174,7 @@ func ListarTransacciones(c *gin.Context) {
 	if accountID != "" { // Si se proporciona un account_id, filtramos las transacciones por cuenta
 		// Ejecutamos una consulta SQL para obtener transacciones filtradas por account_id
 		rows, err = db.Query(`
-            SELECT id, account_id, amount, currency, type, description, created_at
+            SELECT id, account_id, amount::float8, currency, type, description, created_at
             SUM(
                 CASE 
                     WHEN type = 'deposito' THEN amount
@@ -227,7 +227,7 @@ func ListarTransacciones(c *gin.Context) {
 	    SELECT 
 		id,
 		account_id,
-		amount,
+		amount::float8,
 		currency,
 		type,
 		description,
