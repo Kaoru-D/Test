@@ -21,7 +21,13 @@ func main() {
 
     r := gin.Default() // Crea un nuevo router
     
-    r.GET("/transacciones", control.ObtenerTransacciones)   // Define la ruta para obtener transacciones
+    // Middleware para inyectar la conexión a la base de datos en el contexto de Gin
+    r.Use(func(c *gin.Context) {
+        c.Set("db", db)
+        c.Next()
+    })
+
+    r.GET("/transacciones", control.ListarTransacciones)   // Define la ruta para obtener transacciones
     r.POST("/transacciones", control.GuardarTransaccion(db)) // Define la ruta para guardar una transacción
     
     r.Run(":8080") // http://localhost:8080/transacciones 
