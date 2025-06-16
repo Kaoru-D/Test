@@ -1,3 +1,6 @@
+CREATE DATABASE finanzas;
+
+
 CREATE table if not exists accounts (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255),

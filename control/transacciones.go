@@ -42,19 +42,25 @@ func ObtenerTransacciones(c *gin.Context) {
 
     query := `
         SELECT
-            t.id,
-            t.account_id,
-            t.amount::float8, -- Asegúrate de que el tipo de datos coincida con tu base de datos
-            t.currency,
-            t.type,
-            t.description,
-            t.created_at,
-            SUM(t.amount) OVER (
-                PARTITION BY t.account_id
-                ORDER BY t.created_at
-                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-            ) AS saldo
-        FROM transactions t
+        id,
+        account_id,
+        amount::float8,
+        currency,
+        type,
+        description,
+        created_at,
+        SUM(
+            CASE 
+                WHEN type = 'deposito' THEN amount::float8
+                WHEN type = 'retiro' THEN -amount::float8
+                ELSE 0
+            END
+        ) OVER (
+            PARTITION BY account_id 
+            ORDER BY created_at
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS saldo_acumulado
+    FROM transactions
         `
 
     var args []interface{}
@@ -225,25 +231,25 @@ func ListarTransacciones(c *gin.Context) {
         // Construimos la consulta SQL con el filtro de fecha si es necesario
 		query := `
 	    SELECT 
-		id,
-		account_id,
-		amount::float8,
-		currency,
-		type,
-		description,
-		created_at,
-		SUM(
-			CASE 
-				WHEN type = 'deposito' THEN amount
-				WHEN type = 'retiro' THEN -amount
-				ELSE 0
-			END
-		) OVER (
-			PARTITION BY account_id 
-			ORDER BY created_at
-			ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-		) AS saldo_acumulado
-	FROM transactions
+        id,
+        account_id,
+        amount::float8,
+        currency,
+        type,
+        description,
+        created_at,
+        SUM(
+            CASE 
+                WHEN type = 'deposito' THEN amount::float8
+                WHEN type = 'retiro' THEN -amount::float8
+                ELSE 0
+            END
+        ) OVER (
+            PARTITION BY account_id 
+            ORDER BY created_at
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS saldo_acumulado
+    FROM transactions
 `
 
 		if filtroFecha != "" {  // Si hay un filtro de fecha, lo agregamos a la consulta
